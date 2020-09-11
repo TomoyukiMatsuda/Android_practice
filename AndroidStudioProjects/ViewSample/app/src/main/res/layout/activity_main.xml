@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="#A1A9BA"
     android:orientation="vertical">
-
+    // 名前テキストビュー
     <TextView
         android:id="@+id/tvLabelInput"
         android:layout_width="wrap_content"
@@ -15,7 +15,7 @@
         android:background="#ffffff"
         android:text="@string/tv_msg"
         android:textSize="25sp"/>
-
+    // テキストフィールド
     <EditText
         android:id="@+id/etInput"
         android:layout_width="match_parent"
@@ -24,7 +24,7 @@
         android:layout_marginTop="5dp"
         android:background="#ffffff"
         android:inputType="text"/>
-
+    // レイアウトのフレーム
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
