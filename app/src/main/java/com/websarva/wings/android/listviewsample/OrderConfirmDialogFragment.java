@@ -31,7 +31,7 @@ public class OrderConfirmDialogFragment extends DialogFragment {
     }
 
     private class DialogButtonClickListener implements DialogInterface.OnClickListener {
-        
+
         @Override
         public void onClick(DialogInterface dialog, int which) {
             // トーストメッセージ用のからの変数を用意
