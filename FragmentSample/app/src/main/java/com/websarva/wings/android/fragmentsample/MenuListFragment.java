@@ -3,6 +3,7 @@ package com.websarva.wings.android.fragmentsample;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,11 @@ public class MenuListFragment extends Fragment {
 
     //このフラグメントが所属する親アクティビティ
     private Activity _parentActivity;
+
+    // 大画面判定を行うための変数を定義
+    // 大画面であればtrue, 通常であればfalseとする
+    // 判定ロジックは menuThanksFrame があるかどうかで判定する
+    private boolean _isLayoutXLarge = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -113,6 +119,19 @@ public class MenuListFragment extends Fragment {
         return view;
     }
 
+    //ここのonActivityCreatedで判定処理を記述する
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        //親クラスのメソッド呼び出し
+        super.onActivityCreated(savedInstanceState);
+        //所属親アクティビティからmenuThanksFrameを取得する
+        View menuThanksFrame = _parentActivity.findViewById(R.id.menuThanksFrame);
+        //menuThanksFrameがnull（通常画面）であれば
+        if (menuThanksFrame == null) {
+            // 大画面判定変数にfalseを代入する
+            _isLayoutXLarge = false;
+        }
+    }
 
     private class ListItemClickListener implements AdapterView.OnItemClickListener {
 
@@ -124,13 +143,24 @@ public class MenuListFragment extends Fragment {
             String menuName = item.get("name");
             String menuPrice = item.get("price");
 
-            //インテントオブジェクトを生成。
-            Intent intent = new Intent(_parentActivity, MenuThanksActivity.class);
-            //第2画面に送るデータを格納。
-            intent.putExtra("menuName", menuName);
-            intent.putExtra("menuPrice", menuPrice);
-            //第2画面の起動。
-            startActivity(intent);
+            //渡すデータを格納するBundleオブジェクトを生成
+            Bundle bundle = new Bundle();
+            //Bundleに渡すデータを格納
+            bundle.putString("menuName", menuName);
+            bundle.putString("menuPrice", menuPrice);
+
+            //大画面の場合と通常の場合でデータの格納方法を変更する
+            if (_isLayoutXLarge) {
+                //大画面の場合
+            } else {
+                //通常画面の場合
+                //インテントオブジェクトを生成
+                Intent intent = new Intent(_parentActivity, MenuThanksActivity.class);
+                //第２画面に送るデータをintentに格納、ここではBundleオブジェクトとしてまとめてデータを格納してる
+                intent.putExtras(bundle);
+                //第２画面の起動
+                startActivity(intent);
+            }
         }
     }
 }

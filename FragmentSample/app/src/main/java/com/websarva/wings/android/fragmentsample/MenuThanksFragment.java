@@ -3,7 +3,9 @@ package com.websarva.wings.android.fragmentsample;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,9 @@ public class MenuThanksFragment extends Fragment {
     //フラグメントが所属する親アクティビティ
     private Activity _parentActivity;
 
+    //大画面かどうかを判定するための変数（true: 大, false: 通常)
+    // onCreateで同一画面にリストフラグメントが存在するかどうかで判定ロジックを行っている
+    private boolean _isLayoutXLarge = true;
 
     // 所属親アクティビティを取得してる
     @Override
@@ -22,6 +27,18 @@ public class MenuThanksFragment extends Fragment {
         super.onCreate(savedInstanceState);
         // 所属するアクティビティオブジェクトを取得
         _parentActivity = getActivity();
+
+        //フラグメントマネージャーを取得
+        FragmentManager manager = getFragmentManager();
+        //フラグメントマネージャーからメニューリストフラグメントを取得
+        MenuListFragment menuListFragment = (MenuListFragment) manager.findFragmentById(R.id.fragmentMenuList);
+
+        //メニューリストフラグメントがnull（通常画面）の場合
+        if (menuListFragment == null) {
+            //大画面判定変数にfalseを代入
+            _isLayoutXLarge = false;
+        }
+
     }
 
     // 所属親アクティビティから渡されたデータを受け取り、戻るボタンにリスナを登録している
