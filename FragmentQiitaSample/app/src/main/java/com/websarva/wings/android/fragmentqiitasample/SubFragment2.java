@@ -7,7 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class SubFragment1 extends Fragment {
+public class SubFragment2 extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -17,17 +17,18 @@ public class SubFragment1 extends Fragment {
         // 所属親アクティビティを取得
         MainActivity activity = (MainActivity) getActivity();
         // アクションバーにタイトルをセット
-        activity.setTitle("サブフラグメント1");
+        activity.setTitle("サブフラグメント２");
         // 戻るボタンを表示する
         activity.setupBackButton(true);
 
         // この記述でフラグメントでアクションバーメニューが使えるようになる
         setHasOptionsMenu(true);
 
+        // View viewのが良い？
         return view;
     }
 
-    // アクションバーボタンを押した時の処理
+    // アクションバーのボタンを押した時の処理
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 

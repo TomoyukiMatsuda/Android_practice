@@ -8,18 +8,19 @@
     android:layout_height="match_parent"
     tools:context=".MainFragment">
 
-<!--    レイアウト調整する？-->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/main_fragment"/>
+        android:textSize="25dp"
+        android:text="メインフラグメントだよ"/>
 
     <Button
         android:id="@+id/bt1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="250dp"
-        android:layout_marginLeft="50dp"
+        android:layout_marginLeft="70dp"
+        android:textSize="25dp"
         android:text="①"/>
 
     <Button
@@ -28,6 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="250dp"
         android:layout_marginLeft="250dp"
+        android:textSize="25dp"
         android:text="②"/>
 
 </FrameLayout>

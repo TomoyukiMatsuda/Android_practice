@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,9 +20,7 @@ public class MainActivity extends AppCompatActivity {
         addFragment(new MainFragment());
     }
 
-    // ボタンクリックしたらフラグメントを切り替える処理を書きたい
-
-
+    // Fragmentを表示させるメソッドを定義（表示したいFragmentを引数として渡す）
     private void addFragment(Fragment fragment) {
         // フラグメントマネージャーの取得
         FragmentManager manager = getSupportFragmentManager();
@@ -33,9 +32,11 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-    // 戻るボタン「←」をセットするメソッド
+    // 戻るボタン「←」をアクションバー（上部バー）にセットするメソッドを定義
     public void setupBackButton(boolean enableBackButton) {
+        // アクションバーを取得
         ActionBar actionBar = getSupportActionBar();
+        // アクションバーに戻るボタン「←」をセット（引数が true: 表示、false: 非表示）
         actionBar.setDisplayHomeAsUpEnabled(enableBackButton);
     }
 }
