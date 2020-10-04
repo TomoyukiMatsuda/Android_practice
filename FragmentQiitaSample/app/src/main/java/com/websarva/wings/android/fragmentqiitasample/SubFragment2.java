@@ -24,7 +24,6 @@ public class SubFragment2 extends Fragment {
         // この記述でフラグメントでアクションバーメニューが使えるようになる
         setHasOptionsMenu(true);
 
-        // View viewのが良い？
         return view;
     }
 
