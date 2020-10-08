@@ -12,17 +12,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // フラグメントを呼びたい
-        showFragment(new SampleFragment());
-    }
-
-    // フラグメント表示メソッド
-    public void showFragment(Fragment fragment) {
-        // replaceじゃなくaddでもいいかも
+        // Activityにフラグメントをセット
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_sample, fragment)
-                .addToBackStack(null)
+                .add(R.id.fragment_sample, new SampleFragment())
                 .commit();
     }
 }

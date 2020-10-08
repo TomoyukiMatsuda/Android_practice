@@ -5,10 +5,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
+
 
 public class SampleDialogFragment extends DialogFragment {
 
@@ -22,52 +20,42 @@ public class SampleDialogFragment extends DialogFragment {
         void onDialogPositiveClick(DialogFragment dialog);
     }
 
-    // リスナーのインスタンス化
+    // クリックイベント発火を伝えるために使用するインターフェースインスタンスを定義
     private SampleDialogListener listener;
 
-    // 呼び出し元のフラグメントとの関連付けを検証するonAttach
+    // onAttach()で呼び出し元の親フラグメントがインターフェースを実装しているかを検証
+    // onAttach(): フラグメントのライフサイクルで最初に呼ばれるメソッドであり、
+    // フラグメントがアクティビティと関連づけられたときに一度だけ呼び出される。contextには所属親アクティビティが入っている
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        // これ重要な記述これないとnullポ
-//        listener = (SampleDialogListener) getTargetFragment();
-//        if (listener instanceof SampleDialogListener == false) {
-//            // 関連付けが適切にされていない場合は例外を投げる
-//            throw new ClassCastException("error Fragment との関連付けを確認");
-//        }
 
         try {
-            // Instantiate the NoticeDialogListener so we can send events to the host
-            // これがないとヌルポ
+            // 親フラグメントにイベントを送信できるように呼び出し元であるSampleFragmentオブジェクトを取得し、
+            // listenerのインスタンスを生成する
             listener = (SampleDialogListener) getTargetFragment();
         } catch (ClassCastException e) {
-            // The activity doesn't implement the interface, throw exception
-            throw new ClassCastException(getTargetFragment().toString()
-                    + " must implement DialogListener");
+            // 親フラグメントがインターフェースを実装していない場合は例外を投げる
+            throw new ClassCastException(getTargetFragment().toString() + "はインターフェースを実装していません");
         }
-
-    }
-
-    @Override
-    public void onAttachFragment(@NonNull Fragment childFragment) {
-        super.onAttachFragment(childFragment);
     }
 
     // ダイアログを生成するonCreateDialog
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
+        // ダイアログを生成する
         return new AlertDialog.Builder(getActivity())
                 .setTitle("確認")
-                .setMessage("メッセージ")
+                .setMessage("コールバックを開始しますか？")
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // コールバック
+                        // 処理を親のフラグメントにコールバックする
                         listener.onDialogPositiveClick(SampleDialogFragment.this);
                     }
                 })
-                .setNegativeButton("キャンセル", null)
+                .setNegativeButton("キャンセル", null) // キャンセルボタンでは何もしないためnull
                 .create();
     }
 }
