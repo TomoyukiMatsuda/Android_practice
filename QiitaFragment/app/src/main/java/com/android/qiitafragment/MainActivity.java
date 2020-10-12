@@ -23,10 +23,7 @@ public class MainActivity extends AppCompatActivity {
         // ここで現在いるフラグメントを取得
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fl_activity_main);
 
-        Log.i(MainActivity.class.getSimpleName(), fragment.toString() + "で端末戻るボタンを押したよ");
-
         if (fragment instanceof FirstFragment || fragment instanceof SecondFragment) {
-
             finish();
         }
         super.onBackPressed();

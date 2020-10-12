@@ -19,7 +19,7 @@ public class DefaultFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_default, container, false);
 
         mainActivity = (MainActivity) getActivity();
-        mainActivity.setupBackButton(true);
+        mainActivity.setupBackButton(false);
 
         Button showFirst = view.findViewById(R.id.bt_show_first);
         Button showSecond = view.findViewById(R.id.bt_show_second);
