@@ -1,23 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ルートをlayoutにすることでDataBindingに対応したレイアウトとして認識される -->
 <!-- activity_main.xml => ActivityMainBinding このような形で自動的にxmlファイル名に応じたBindingクラスが作られる-->
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <!--    Binding オブジェクト -->
     <data>
-        <!-- この記述でUserクラスをバインディングするようになる？ -->
+        <!-- この記述でUserクラスオブジェクトをバインディングするようになる？ -->
         <variable name="user" type="com.android.databindingjava.User" />
+        <!-- ハンドラーを登録 -->
+        <variable name="eventHandlers" type="com.android.databindingjava.EventHandlers" />
     </data>
 
     <!-- Views-->
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/text_view_user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             android:text="@{user.name}" /> <!-- ここの部分でバインディングする的な -->
 
-    </LinearLayout>
+        <Button
+            android:id="@+id/button_change"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="チェンジ"
+            android:onClick="@{eventHandlers.onChangeClick}"
+            app:layout_constraintBottom_toTopOf="@id/text_view_user_name"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="10dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
