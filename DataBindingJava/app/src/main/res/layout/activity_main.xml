@@ -7,7 +7,7 @@
     <data>
         <!-- この記述でUserクラスオブジェクトをバインディングするようになる？ -->
         <variable name="user" type="com.android.databindingjava.User" />
-        <!-- ハンドラーを登録 -->
+        <!-- ハンドラー（インターフェース）を登録 -->
         <variable name="eventHandlers" type="com.android.databindingjava.EventHandlers" />
     </data>
 
