@@ -2,9 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.android.callloglist">
 
-<!--    TODO: 権限エラー解消したい-->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+<!--    TODO: Permissionエラー解消 -->
+<!--    試したこと-->
+<!--    1. Manifestにpermissionの記述を追加（READ_USER_DICTIONARY / READ_PHONE_STATE)を追加-->
+<!--    2. MainActivity にif文でpermissionを確認-->
+
+<!--    <uses-permission android:name="android.permission.READ_USER_DICTIONARY" />-->
+<!--    <uses-permission android:name="android.permission.WRITE_CALL_LOG" /> />-->
+
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:allowBackup="true"
