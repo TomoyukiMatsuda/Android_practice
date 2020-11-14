@@ -9,20 +9,21 @@ import android.view.View;
 
 import com.android.databindingjava.databinding.ActivityMainBinding;
 
+// EventHandlers（インターフェース） を実装
 public class MainActivity extends AppCompatActivity implements EventHandlers {
 
-    private User mUser = new User("ともゆき");
+    private Character chara = new Character("ドラえもん");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // activity_main.xml に対応したクラスのインスタンスを作成
+        // activity_main.xml に対応したクラスの bindingインスタンスを作成
         ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        // activity_main.xmlのuserにmUserをセット
-        binding.setUser(mUser);
-        // activity_main.xmlのhandlersにセット
+        // activity_main.xmlのcharacterにcharaをセット
+        binding.setCharacter(chara);
+        // activity_main.xmlのeventHandlersにMainActivityをセット
         binding.setEventHandlers(this);
     }
 
@@ -30,13 +31,11 @@ public class MainActivity extends AppCompatActivity implements EventHandlers {
     @Override
     public void onChangeClick(View view) {
 
-        // mUserのnameの情報によってセットする文字列を変える
-        if (mUser.getName() == "ともゆき") {
-            mUser.setName("まつだ");
+        // charaのnameの文字列によって、セットする文字列を変える
+        if (chara.getName().equals("ドラえもん")) {
+            chara.setName("のびた");
         } else {
-            mUser.setName("ともゆき");
+            chara.setName("ドラえもん");
         }
-
-        Log.d("DEBUG", mUser.getName());
     }
 }

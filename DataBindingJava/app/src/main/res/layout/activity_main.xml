@@ -3,11 +3,12 @@
 <!-- activity_main.xml => ActivityMainBinding このような形で自動的にxmlファイル名に応じたBindingクラスが作られる-->
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <!--    Binding オブジェクト -->
     <data>
-        <!-- この記述でUserクラスオブジェクトをバインディングするようになる？ -->
-        <variable name="user" type="com.android.databindingjava.User" />
-        <!-- ハンドラー（インターフェース）を登録 -->
+        <!-- この記述によりcharacterという名前で、Userクラスオブジェクトとの結びつけがされる -->
+        <variable name="character" type="com.android.databindingjava.Character" />
+        <!-- この記述によりeventHandlersという名前で、ハンドラー（インターフェース）が設定される -->
         <variable name="eventHandlers" type="com.android.databindingjava.EventHandlers" />
     </data>
 
@@ -21,23 +22,24 @@
             android:id="@+id/text_view_user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="30dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:text="@{user.name}" /> <!-- ここの部分でバインディングする的な -->
+            android:text="@{character.name}" />
 
         <Button
             android:id="@+id/button_change"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="30dp"
             android:text="チェンジ"
             android:onClick="@{eventHandlers.onChangeClick}"
             app:layout_constraintBottom_toTopOf="@id/text_view_user_name"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="10dp" />
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

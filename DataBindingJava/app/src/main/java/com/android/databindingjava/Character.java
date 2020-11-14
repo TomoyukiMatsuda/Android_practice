@@ -4,10 +4,10 @@ import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
 // BaseObservableを継承
-public class User extends BaseObservable {
+public class Character extends BaseObservable {
     private String name;
 
-    public User(String name) {
+    public Character(String name) {
         this.name = name;
     }
 
