@@ -24,7 +24,6 @@ class MainActivity : AppCompatActivity() {
             // アダプターに Itemインスタンス を add していく
             groupAdapter.add(GroupieItem(item))
         }
-
     }
 }
 
