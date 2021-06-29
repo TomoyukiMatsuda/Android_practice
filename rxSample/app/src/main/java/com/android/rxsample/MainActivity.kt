@@ -1,14 +1,12 @@
 package com.android.rxsample
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Single
+import androidx.appcompat.app.AppCompatActivity
+import io.reactivex.rxjava3.core.*
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.kotlin.addTo
 import io.reactivex.rxjava3.kotlin.subscribeBy
-import java.util.Locale.filter
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,6 +16,7 @@ class MainActivity : AppCompatActivity() {
     // CompositeDisposable を利用しないでまとめて破棄できない面倒なパターン
     lateinit var observable: Disposable
     lateinit var single: Disposable
+    lateinit var completable: Disposable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +35,7 @@ class MainActivity : AppCompatActivity() {
                 onNext = {
                     println("onNext: $it") },
                 onError = { println("エラーーーー")},
-                onComplete = { println("正常に終了！！！！") } // 値は受け取れない(onNextのようにitにアクセスできない）
+                onComplete = { println("onComplete: 正常に終了！！！！") } // 値は受け取れない(onNextのようにitにアクセスできない）
             )
             .addTo(disposables) // disposablesに このRxオブジェクトを追加
 
@@ -54,8 +53,22 @@ class MainActivity : AppCompatActivity() {
             )
             .addTo(disposables) // disposablesに このRxオブジェクトを追加
 
+        // 値は流せない
+        Completable.create { emitter: CompletableEmitter ->
+            try {
+                // 何らかの処理
+                emitter.onComplete()
+            } catch (ex: Exception) {
+                emitter.onError(ex)
+            }
+        }.subscribeBy(
+            onError = {println("エラーーーー")},
+            onComplete = {println("onComplete: 正常に終了！！！！")}
+        )
+        .addTo(disposables) // disposablesに このRxオブジェクトを追加
 
-        println("############################################################")
+
+        println("#######################CompositeDisposableを利用しない説明用#####################################")
         // ############################################################
         // CompositeDisposable を利用しないでまとめて破棄できない面倒なパターン説明用
         observable = Observable.just(1, 2, 3, 4, 5)
@@ -65,7 +78,7 @@ class MainActivity : AppCompatActivity() {
                 onNext = {
                     println("onNext: $it") },
                 onError = { println("エラーーーー")},
-                onComplete = { println("正常に終了！！！！") } // 値は受け取れない(onNextのようにitにアクセスできない）
+                onComplete = { println("onComplete: 正常に終了！！！！") } // 値は受け取れない(onNextのようにitにアクセスできない）
             )
 
         single = Single.just(arrayOf(1, 2, 3, 4, 5, 6, 7))
@@ -79,15 +92,30 @@ class MainActivity : AppCompatActivity() {
                     println("onSuccess: $it") },
                 onError = { println("エラーーーー")}, // onCompleteは存在しない
             )
+
+        completable = Completable.create { emitter: CompletableEmitter ->
+            try {
+                // 何らかの処理
+                emitter.onComplete()
+            } catch (ex: Exception) {
+                emitter.onError(ex)
+            }
+        }.subscribeBy(
+            onError = {println("エラーーーー")},
+            onComplete = {println("onComplete: 正常に終了！！！！")}
+        )
+            .addTo(disposables) // disposablesに このRxオブジェクトを追加
     }
 
     override fun onDestroy() {
         super.onDestroy()
         // 「イベント検知できる状態」の終了
+        // CompositeDisposable#clear() で全て dispose() したことと同じになる
         disposables.clear()
 
-        // CompositeDisposable を利用しないでまとめて破棄できない面倒なパターン説明用
+        // CompositeDisposable を利用しないでまとめて破棄できない面倒なパターン
         observable.dispose()
         single.dispose()
+        completable.dispose()
     }
 }
