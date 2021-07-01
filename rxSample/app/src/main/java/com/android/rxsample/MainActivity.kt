@@ -7,6 +7,10 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.kotlin.addTo
 import io.reactivex.rxjava3.kotlin.subscribeBy
+import io.reactivex.rxjava3.subjects.BehaviorSubject
+import io.reactivex.rxjava3.subjects.PublishSubject
+import org.reactivestreams.Subscriber
+import org.reactivestreams.Subscription
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,11 +26,26 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        rxSubject()
         rxExecute()
     }
 
-    private fun rxExecute() {
+    private fun rxSubject() {
+        val bSubject = BehaviorSubject.create<String>()
+        bSubject.onNext("BehaviorSubject onNext: ホゲホゲ")
+        bSubject.subscribe {
+            println(it)
+        }
 
+        // TODO: 機能してない、どうすれば機能するようになる？？
+        val pSubject = PublishSubject.create<String>()
+        pSubject.onNext("PublishSubject onNext: ホゲホゲ")
+        pSubject.subscribe {
+            println(it)
+        }
+    }
+
+    private fun rxExecute() {
         // Observable　流れてきた値の数だけonNext される
         Observable.just(1, 2, 3, 4, 5)
             .take(3)
