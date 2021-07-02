@@ -26,8 +26,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        rxSubject()
-        rxExecute()
+        //rxSubject()
+        //rxExecute()
+        rxWeather()
     }
 
     private fun rxSubject() {
@@ -43,6 +44,23 @@ class MainActivity : AppCompatActivity() {
         pSubject.subscribe {
             println(it)
         }
+    }
+
+    private fun rxWeather() {
+        Observable.just(1,4,3,2,8,5)
+            .map {
+                when (it) {
+                    1 -> "一です"
+                    2 -> "二です"
+                    3 -> "三です"
+                    4 -> "四です"
+                    5 -> "五です"
+                    else -> "ちゃう"
+                }
+            }
+            .subscribe {
+                println(it)
+            }
     }
 
     private fun rxExecute() {
