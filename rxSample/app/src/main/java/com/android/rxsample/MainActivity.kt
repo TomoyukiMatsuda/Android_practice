@@ -26,22 +26,29 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //rxSubject()
+        rxSubject()
         //rxExecute()
-        rxWeather()
+        //rxWeather()
     }
 
     private fun rxSubject() {
+        // BehaviorSubject: 初期値を使うならこれ？？
         val bSubject = BehaviorSubject.create<String>()
         bSubject.onNext("BehaviorSubject onNext: ホゲホゲ")
+        bSubject.onNext("BehaviorSubject onNext: ホゲホゲ２")
+        bSubject.onNext("BehaviorSubject onNext: ホゲホゲ３")
         bSubject.subscribe {
             println(it)
         }
+        bSubject.onComplete()
 
+        // PublishSubject: 初期値を使わないならこれ？？
         // TODO: 機能してない、どうすれば機能するようになる？？
         val pSubject = PublishSubject.create<String>()
         pSubject.onNext("PublishSubject onNext: ホゲホゲ")
-        pSubject.subscribe {
+        pSubject.onNext("PublishSubject onNext: ホゲホゲ２")
+        pSubject.onNext("PublishSubject onNext: ホゲホゲ３")
+        pSubject.subscribeBy {
             println(it)
         }
     }
