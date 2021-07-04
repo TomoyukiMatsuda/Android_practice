@@ -11,6 +11,7 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject
 import io.reactivex.rxjava3.subjects.PublishSubject
 import org.reactivestreams.Subscriber
 import org.reactivestreams.Subscription
+import java.lang.IllegalStateException
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,23 +35,37 @@ class MainActivity : AppCompatActivity() {
     private fun rxSubject() {
         // BehaviorSubject: 初期値を使うならこれ？？
         val bSubject = BehaviorSubject.create<String>()
+
+        bSubject.subscribeBy(
+            onNext = {println(it)}
+        )
+
         bSubject.onNext("BehaviorSubject onNext: ホゲホゲ")
         bSubject.onNext("BehaviorSubject onNext: ホゲホゲ２")
         bSubject.onNext("BehaviorSubject onNext: ホゲホゲ３")
-        bSubject.subscribe {
-            println(it)
-        }
-        bSubject.onComplete()
+        //bSubject.onComplete()
 
         // PublishSubject: 初期値を使わないならこれ？？
-        // TODO: 機能してない、どうすれば機能するようになる？？
         val pSubject = PublishSubject.create<String>()
+        pSubject.subscribeBy(
+            onNext = {
+                println(it)
+            },
+            onError = {
+                println("$it")
+                      },
+            onComplete = {
+                println("終了")
+            }
+        )
+
         pSubject.onNext("PublishSubject onNext: ホゲホゲ")
         pSubject.onNext("PublishSubject onNext: ホゲホゲ２")
         pSubject.onNext("PublishSubject onNext: ホゲホゲ３")
-        pSubject.subscribeBy {
-            println(it)
-        }
+        pSubject.onNext(
+            "onNext")
+        pSubject.onError(IllegalStateException("エラー"))
+        pSubject.onComplete()
     }
 
     private fun rxWeather() {
