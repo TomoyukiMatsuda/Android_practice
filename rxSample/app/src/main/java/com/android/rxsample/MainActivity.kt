@@ -1,5 +1,6 @@
 package com.android.rxsample
 
+import android.accounts.NetworkErrorException
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.rxjava3.core.*
@@ -27,44 +28,51 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        rxSubject()
-        //rxExecute()
-        //rxWeather()
+        rxBehaviorSubject()
+        rxPublishSubject()
     }
 
-    private fun rxSubject() {
-        // BehaviorSubject: 初期値を使うならこれ？？
+    private fun rxBehaviorSubject() {
         val bSubject = BehaviorSubject.create<String>()
 
+        // onNext で subscribe 前に値を流す。しかし、最新の値しかキャッシュされない。
+        bSubject.onNext("Behavior/onNext: キャッシュ①")
+        bSubject.onNext("Behavior/onNext: キャッシュ②")
+        bSubject.onNext("Behavior/onNext: キャッシュ③")
+
         bSubject.subscribeBy(
-            onNext = {println(it)}
+            onComplete = { println("Behavior/onComplete: 終了！！！") },
+            onError = { println(it) },
+            onNext = { println(it) }
         )
 
-        bSubject.onNext("BehaviorSubject onNext: ホゲホゲ")
-        bSubject.onNext("BehaviorSubject onNext: ホゲホゲ２")
-        bSubject.onNext("BehaviorSubject onNext: ホゲホゲ３")
-        //bSubject.onComplete()
+        bSubject.onNext("Behavior/onNext: リスナー①")
+        // エラーが起きたら終了する
+        // bSubject.onError(IllegalStateException("Behavior/onError: エラーーーーー"))
+        bSubject.onNext("Behavior/onNext: リスナー②")
+        bSubject.onNext("Behavior/onNext: リスナー③")
+        bSubject.onComplete()
+    }
 
-        // PublishSubject: 初期値を使わないならこれ？？
+    private fun rxPublishSubject() {
         val pSubject = PublishSubject.create<String>()
+
+        // onNext で subscribe 前に値を流そうとする。しかし、キャッシュされない。（ここがBehaviorSubjectと異なるポイント）
+        pSubject.onNext("Publish/onNext: キャッシュ①")
+        pSubject.onNext("Publish/onNext: キャッシュ②")
+        pSubject.onNext("Publish/onNext: キャッシュ③")
+
         pSubject.subscribeBy(
-            onNext = {
-                println(it)
-            },
-            onError = {
-                println("$it")
-                      },
-            onComplete = {
-                println("終了")
-            }
+            onComplete = { println("Publish/onComplete: 終了！！！") },
+            onError = { println(it) },
+            onNext = { println(it) }
         )
 
-        pSubject.onNext("PublishSubject onNext: ホゲホゲ")
-        pSubject.onNext("PublishSubject onNext: ホゲホゲ２")
-        pSubject.onNext("PublishSubject onNext: ホゲホゲ３")
-        pSubject.onNext(
-            "onNext")
-        pSubject.onError(IllegalStateException("エラー"))
+        pSubject.onNext("Publish/onNext: リスナー①")
+        // エラーが起きたら終了する
+        // pSubject.onError(IllegalStateException("Publish/onError: エラーーーーー"))
+        pSubject.onNext("Publish/onNext: リスナー②")
+        pSubject.onNext("Publish/onNext: リスナー③")
         pSubject.onComplete()
     }
 
