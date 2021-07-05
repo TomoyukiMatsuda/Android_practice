@@ -28,6 +28,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        rxWeather()
+        rxExecute()
         rxBehaviorSubject()
         rxPublishSubject()
     }
@@ -79,6 +81,7 @@ class MainActivity : AppCompatActivity() {
     private fun rxWeather() {
         Observable.just(1,4,3,2,8,5)
             .map {
+                // 値が流れてきたら map で変換している
                 when (it) {
                     1 -> "一です"
                     2 -> "二です"
@@ -172,6 +175,10 @@ class MainActivity : AppCompatActivity() {
             onComplete = {println("onComplete: 正常に終了！！！！")}
         )
             .addTo(disposables) // disposablesに このRxオブジェクトを追加
+
+        // TODO: 両者の違いは何？↓↓
+        // subscribeBy() は引数指定でそれぞれの処理に対応させている？
+        // subscribeBy{} は成功時の処理にだけ対応させている？
     }
 
     override fun onDestroy() {
