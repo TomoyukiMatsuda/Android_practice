@@ -10,9 +10,7 @@ import io.reactivex.rxjava3.kotlin.addTo
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import io.reactivex.rxjava3.subjects.PublishSubject
-import org.reactivestreams.Subscriber
-import org.reactivestreams.Subscription
-import java.lang.IllegalStateException
+import kotlin.IllegalStateException
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,10 +26,44 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        rxWeather()
-        rxExecute()
-        rxBehaviorSubject()
-        rxPublishSubject()
+//        rxWeather()
+//        rxExecute()
+//        rxBehaviorSubject()
+//        rxPublishSubject()
+        rxOnDoOn()
+    }
+
+    private fun rxOnDoOn() {
+        Observable.just(1, 2, 3, 4, 5)
+            .take(3)
+            .doOnError {
+                println("doOnError 1: $it")
+            }
+            .doOnNext {
+//                if (it == 2) {
+//                    throw IllegalStateException("doOnNext 1 でエラー: $it")
+//                }
+                println("doOnNext 1: $it")
+            }
+            .doOnError {
+                println("doOnError 2: $it")
+            }
+            .filter { it % 2 == 1 }
+            .doOnNext {
+                if (it == 3) {
+                    throw IllegalStateException("doOnNext 1 でエラー: $it")
+                }
+                println("doOnNext 2: $it")
+            }
+            .subscribeBy(
+                onNext = {
+                    println("onNext: $it") },
+                onError = {
+                    println("エラーーーー: $it")
+                          },
+                onComplete = { println("onComplete: 正常に終了！！！！") } // 値は受け取れない(onNextのようにitにアクセスできない）
+            )
+            .addTo(disposables)
     }
 
     private fun rxBehaviorSubject() {
