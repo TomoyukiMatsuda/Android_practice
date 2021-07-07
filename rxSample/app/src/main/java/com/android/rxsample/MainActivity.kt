@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
             .doOnError {
                 println("doOnError 1: $it")
             }
-            .doOnNext {
+            .doOnNext { // 途中で流れてきた値にアクセスして処理できる？
 //                if (it == 2) {
 //                    throw IllegalStateException("doOnNext 1 でエラー: $it")
 //                }
@@ -54,6 +54,9 @@ class MainActivity : AppCompatActivity() {
                     throw IllegalStateException("doOnNext 1 でエラー: $it")
                 }
                 println("doOnNext 2: $it")
+            }
+            .doOnNext {
+                // 難しそう
             }
             .subscribeBy(
                 onNext = {
