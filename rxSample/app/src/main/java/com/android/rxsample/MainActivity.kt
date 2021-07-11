@@ -35,6 +35,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun rxOnDoOn() {
         Observable.just(1, 2, 3, 4, 5)
+            .doOnNext {
+                if (it == 3) {
+                    println("doOnNext 1: $it")
+                    return@doOnNext
+                }
+            }
             .take(3)
             .doOnError {
                 println("doOnError 1: $it")
@@ -43,7 +49,10 @@ class MainActivity : AppCompatActivity() {
 //                if (it == 2) {
 //                    throw IllegalStateException("doOnNext 1 でエラー: $it")
 //                }
-                println("doOnNext 1: $it")
+                println("doOnNext 2: $it")
+            }
+            .doOnComplete {
+                println("doOnComplete 1: 正常？")
             }
             .doOnError {
                 println("doOnError 2: $it")
@@ -51,12 +60,12 @@ class MainActivity : AppCompatActivity() {
             .filter { it % 2 == 1 }
             .doOnNext {
                 if (it == 3) {
-                    throw IllegalStateException("doOnNext 1 でエラー: $it")
+                    throw IllegalStateException("doOnNext 3 でエラー: $it")
                 }
-                println("doOnNext 2: $it")
+                println("doOnNext 3: $it")
             }
-            .doOnNext {
-                // 難しそう
+            .doOnComplete {
+                println("doOnComplete 2: 正常？")
             }
             .subscribeBy(
                 onNext = {
@@ -210,10 +219,6 @@ class MainActivity : AppCompatActivity() {
             onComplete = {println("onComplete: 正常に終了！！！！")}
         )
             .addTo(disposables) // disposablesに このRxオブジェクトを追加
-
-        // TODO: 両者の違いは何？↓↓
-        // subscribeBy() は引数指定でそれぞれの処理に対応させている？
-        // subscribeBy{} は成功時の処理にだけ対応させている？
     }
 
     override fun onDestroy() {
