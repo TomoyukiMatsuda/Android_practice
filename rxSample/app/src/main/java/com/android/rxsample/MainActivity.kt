@@ -1,6 +1,5 @@
 package com.android.rxsample
 
-import android.accounts.NetworkErrorException
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.rxjava3.core.*
@@ -36,21 +35,38 @@ class MainActivity : AppCompatActivity() {
 
     private fun rxDoOnSF() {
         Observable.just(1, 2, 3, 4, 5)
+            .doOnError {
+                println("doOnError: $it")
+            }
+            .doOnComplete {
+                println("doOnComplete: １")
+            }
             .doOnNext {
                 if (it == 3) {
                     println("doOnNext (it == 3): $it")
+                    //throw IllegalStateException("doOnNext 1 でエラー: $it")
                 }
                 println("doOnNext : $it")
             }
             .filter { it % 2 == 1 }
+            .doOnError {
+                println("doOnError: $it")
+            }
             .doOnSubscribe {
                 // ストリームを開始するときに呼ばれてるっぽい doOnNextよりも先に呼ばれてる
                 println("doOnSubscribe: $it")
+            }
+            .doOnError {
+                println("doOnError: $it")
             }
             .doFinally {
                 // 一番最後？に呼ばれているっぽい、onCompleteよりも後に呼ばれている
                 println("doFinally")
             }
+            .doOnComplete {
+                println("doOnComplete: ２")
+            }
+            .retry(2)
             .subscribeBy(
                 onNext = {
                     println("onNext: $it") },
