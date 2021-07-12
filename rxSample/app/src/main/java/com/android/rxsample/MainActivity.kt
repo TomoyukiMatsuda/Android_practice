@@ -30,7 +30,36 @@ class MainActivity : AppCompatActivity() {
 //        rxExecute()
 //        rxBehaviorSubject()
 //        rxPublishSubject()
-        rxOnDoOn()
+        //rxOnDoOn()
+        rxDoOnSF()
+    }
+
+    private fun rxDoOnSF() {
+        Observable.just(1, 2, 3, 4, 5)
+            .doOnNext {
+                if (it == 3) {
+                    println("doOnNext (it == 3): $it")
+                }
+                println("doOnNext : $it")
+            }
+            .filter { it % 2 == 1 }
+            .doOnSubscribe {
+                // ストリームを開始するときに呼ばれてるっぽい doOnNextよりも先に呼ばれてる
+                println("doOnSubscribe: $it")
+            }
+            .doFinally {
+                // 一番最後？に呼ばれているっぽい、onCompleteよりも後に呼ばれている
+                println("doFinally")
+            }
+            .subscribeBy(
+                onNext = {
+                    println("onNext: $it") },
+                onError = {
+                    println("エラーーーー: $it")
+                },
+                onComplete = { println("onComplete: 正常に終了！！！！") }
+            )
+            .addTo(disposables)
     }
 
     private fun rxOnDoOn() {
