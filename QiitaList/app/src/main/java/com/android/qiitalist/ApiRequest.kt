@@ -2,7 +2,6 @@ package com.android.qiitalist
 
 import com.android.qiitalist.model.Article
 import io.reactivex.rxjava3.core.Single
-import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -15,5 +14,6 @@ interface ApiRequest {
         @Path("tag_id") tagId: String,
         @Query("page") page: Int,
         @Query("per_page") perPage: Int
-    ): Single<Response<List<Article>>>
+    ): Single<List<Article>>
+    // <Response<List<Article>>> ？？
 }
