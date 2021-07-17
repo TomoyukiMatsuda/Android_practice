@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
     private fun rxDoOnSF() {
         Observable.just(1, 2, 3, 4, 5)
             .doOnError {
-                println("doOnError: $it")
+                println("doOnError 1: $it")
             }
             .doOnComplete {
                 println("doOnComplete: １")
@@ -50,14 +50,14 @@ class MainActivity : AppCompatActivity() {
             }
             .filter { it % 2 == 1 }
             .doOnError {
-                println("doOnError: $it")
+                println("doOnError 2: $it")
             }
             .doOnSubscribe {
                 // ストリームを開始するときに呼ばれてるっぽい doOnNextよりも先に呼ばれてる
                 println("doOnSubscribe: $it")
             }
             .doOnError {
-                println("doOnError: $it")
+                println("doOnError 3: $it")
             }
             .doFinally {
                 // 一番最後？に呼ばれているっぽい、onCompleteよりも後に呼ばれている
@@ -66,7 +66,6 @@ class MainActivity : AppCompatActivity() {
             .doOnComplete {
                 println("doOnComplete: ２")
             }
-            .retry(2)
             .subscribeBy(
                 onNext = {
                     println("onNext: $it") },
