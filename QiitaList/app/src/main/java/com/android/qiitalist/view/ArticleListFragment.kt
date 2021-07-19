@@ -12,12 +12,15 @@ import com.android.qiitalist.viewModel.ArticleListViewModel
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.kotlin.addTo
 import io.reactivex.rxjava3.kotlin.subscribeBy
 
 class ArticleListFragment : Fragment() {
     private lateinit var binding: FragmentArticleListBinding
     private lateinit var viewModel: ArticleListViewModel
     private var currentPage = 1
+    private var disposable = CompositeDisposable()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,5 +61,11 @@ class ArticleListFragment : Fragment() {
                 articleList.addAll(articles)
                 groupAdapter.update(articleList.map { ArticleListItemFactory(it) })
             }
+            .addTo(disposable)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposable.clear()
     }
 }
