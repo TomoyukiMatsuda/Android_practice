@@ -26,11 +26,97 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 //        rxWeather()
-//        rxExecute()
+        rxExecute()
 //        rxBehaviorSubject()
 //        rxPublishSubject()
         //rxOnDoOn()
-        rxDoOnSF()
+        //rxDoOnSF()
+    }
+
+    private fun rxExecute() {
+        // 複数個の値を流すことができる / subscribe に流れてきた値の数だけ onNext される
+        Observable.just(1, 2, 3, 4, 5, 6, 7)
+            .filter {
+                // 流れてきた値が 4 のときにエラーが起きるようにする
+                if (it == 4) {
+                    throw IllegalStateException("値が $it でエラー")
+                }
+                it % 2 == 0
+            }
+            .subscribeBy(
+                onError = { println("onError: エラーーーー $it")}, // onError() ではエラーの内容（Throwable型）を受け取れる
+                onComplete = { println("onComplete: 正常に処理終了！") }, // onComplete() では値は受け取れない
+                onNext = { println("onNext: $it") } // onNext() では値を受け取れる
+            )
+
+//        // 流せる値は１個だけなので、リストを一つの値として渡している
+//        Single.just(arrayListOf(1, 2, 3, 4, 5, 6, 7))
+//            .map {
+//                it.filter { i ->
+//                    i % 2 == 0
+//                }
+//            }
+//            .subscribeBy(
+//                onSuccess = {
+//                    throw IllegalStateException("onSuccess でエラー")
+//                    println("onSuccess: $it")
+//                            }, // onSuccess() では流れてきた値を受け取れる
+//                onError = { println("onError: エラーーーー $it") }, // onError() ではエラーの内容（Throwable型）を受け取れる
+//            )
+
+        // 値は渡せない
+//        Completable.create { emitter: CompletableEmitter ->
+//            try {
+//                emitter.onComplete()
+//            } catch (ex: Exception) {
+//                emitter.onError(ex)
+//            }
+//        }.subscribeBy(
+//            onError = { println("onError: エラーーーー $it") }, // onError() ではエラーの内容（Throwable型）を受け取れる
+//            onComplete = {
+//                throw IllegalStateException("onComplete でエラー")
+//                println("onComplete: 正常に終了！")
+//            } // onComplete() では値は受け取れない
+//        )
+
+
+//        println("#######################CompositeDisposableを利用しない説明用#####################################")
+//        // ############################################################
+//        // CompositeDisposable を利用しないでまとめて破棄できない面倒なパターン説明用
+//        observable = Observable.just(1, 2, 3, 4, 5)
+//            .take(3)
+//            .filter { it % 2 ==1 }
+//            .subscribeBy(
+//                onNext = {
+//                    println("onNext: $it") },
+//                onError = { println("エラーーーー")},
+//                onComplete = { println("onComplete: 正常に終了！！！！") } // 値は受け取れない(onNextのようにitにアクセスできない）
+//            )
+//
+//        single = Single.just(arrayOf(1, 2, 3, 4, 5, 6, 7))
+//            .map {
+//                it.filter { i ->
+//                    i % 2 == 1
+//                }
+//            }
+//            .subscribeBy(
+//                onSuccess = {
+//                    println("onSuccess: $it") },
+//                onError = { println("エラーーーー")}, // onCompleteは存在しない
+//            )
+//
+//        completable = Completable.create { emitter: CompletableEmitter ->
+//            try {
+//                // 何らかの処理
+//                emitter.onComplete()
+//            } catch (ex: Exception) {
+//                emitter.onError(ex)
+//            }
+//        }.subscribeBy(
+//            onError = {println("エラーーーー")},
+//            onComplete = {println("onComplete: 正常に終了！！！！")}
+//        )
+//            .addTo(disposables) // disposablesに このRxオブジェクトを追加
     }
 
     private fun rxDoOnSF() {
@@ -182,87 +268,6 @@ class MainActivity : AppCompatActivity() {
             .subscribe {
                 println(it)
             }
-    }
-
-    private fun rxExecute() {
-        // Observable　流れてきた値の数だけonNext される
-        Observable.just(1, 2, 3, 4, 5)
-            .take(3)
-            .filter { it % 2 ==1 }
-            .subscribeBy(
-                onNext = {
-                    println("onNext: $it") },
-                onError = { println("エラーーーー")},
-                onComplete = { println("onComplete: 正常に終了！！！！") } // 値は受け取れない(onNextのようにitにアクセスできない）
-            )
-            .addTo(disposables) // disposablesに このRxオブジェクトを追加
-
-        // 流せる値は１個だけ
-        Single.just(arrayOf(1, 2, 3, 4, 5, 6, 7))
-            .map {
-                it.filter { i ->
-                    i % 2 == 1
-                }
-            }
-            .subscribeBy(
-                onSuccess = {
-                    println("onSuccess: $it") },
-                onError = { println("エラーーーー")}, // onCompleteは存在しない
-            )
-            .addTo(disposables) // disposablesに このRxオブジェクトを追加
-
-        // 値は流せない
-        Completable.create { emitter: CompletableEmitter ->
-            try {
-                // 何らかの処理
-                emitter.onComplete()
-            } catch (ex: Exception) {
-                emitter.onError(ex)
-            }
-        }.subscribeBy(
-            onError = {println("エラーーーー")},
-            onComplete = {println("onComplete: 正常に終了！！！！")}
-        )
-        .addTo(disposables) // disposablesに このRxオブジェクトを追加
-
-
-        println("#######################CompositeDisposableを利用しない説明用#####################################")
-        // ############################################################
-        // CompositeDisposable を利用しないでまとめて破棄できない面倒なパターン説明用
-        observable = Observable.just(1, 2, 3, 4, 5)
-            .take(3)
-            .filter { it % 2 ==1 }
-            .subscribeBy(
-                onNext = {
-                    println("onNext: $it") },
-                onError = { println("エラーーーー")},
-                onComplete = { println("onComplete: 正常に終了！！！！") } // 値は受け取れない(onNextのようにitにアクセスできない）
-            )
-
-        single = Single.just(arrayOf(1, 2, 3, 4, 5, 6, 7))
-            .map {
-                it.filter { i ->
-                    i % 2 == 1
-                }
-            }
-            .subscribeBy(
-                onSuccess = {
-                    println("onSuccess: $it") },
-                onError = { println("エラーーーー")}, // onCompleteは存在しない
-            )
-
-        completable = Completable.create { emitter: CompletableEmitter ->
-            try {
-                // 何らかの処理
-                emitter.onComplete()
-            } catch (ex: Exception) {
-                emitter.onError(ex)
-            }
-        }.subscribeBy(
-            onError = {println("エラーーーー")},
-            onComplete = {println("onComplete: 正常に終了！！！！")}
-        )
-            .addTo(disposables) // disposablesに このRxオブジェクトを追加
     }
 
     override fun onDestroy() {
